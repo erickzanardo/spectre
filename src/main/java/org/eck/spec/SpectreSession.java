@@ -7,10 +7,10 @@ import org.junit.runner.Description;
 
 @SuppressWarnings("rawtypes")
 public class SpectreSession {
-    private Stack<Description> specStack = new Stack<>();
+    private Stack<SpecContext> specStack = new Stack<>();
     private static SpectreSession instance;
     private Class currentClass;
-    private Description currentDescription;
+    private SpecContext currentContext;
     private List<SpectreTestEntry> specs;
 
     public static SpectreSession instance() {
@@ -19,8 +19,9 @@ public class SpectreSession {
         return instance;
     }
 
-    public void setCurrentDescription(Description desc) {
-        this.currentDescription = desc;
+    public void setCurrentContext(SpecContext context) {
+        this.currentContext = context;
+        ;
     }
 
     public void setCurrentClass(Class aClass) {
@@ -35,25 +36,43 @@ public class SpectreSession {
         this.specs.add(spec);
     }
 
-    public Description createNewTestDescription(String name) {
+    public Description createNewTestDescription(String name, Block block) {
         Description spec = Description.createTestDescription(currentClass, name);
-        currentDescription.addChild(spec);
-        setCurrentDescription(spec);
+        currentContext.getSpec().addChild(spec);
+
+        SpectreTestEntry specEntry = new SpectreTestEntry(spec, block, currentContext);
+        addSpec(specEntry);
+
         return spec;
     }
 
     public Description createNewTestGroupDescription(String name) {
         Description spec = Description.createSuiteDescription(name, currentClass.getAnnotations());
-        currentDescription.addChild(spec);
-        setCurrentDescription(spec);
-        specStack.push(spec);
+        SpecContext context = new SpecContext(spec);
+
+        if (currentContext != null) {
+            context.setParent(context);
+        }
+
+        currentContext.getSpec().addChild(spec);
+        specStack.push(new SpecContext(spec));
+
+        setCurrentContext(context);
         return spec;
+    }
+
+    public void addBefore(Block block) {
+        currentContext.getBefore().add(block);
+    }
+
+    public void addBeforeEach(Block block) {
+        currentContext.getBeforeEach().add(block);
     }
 
     public void blockDone() {
         if (specStack.size() > 1) {
             specStack.pop();
-            setCurrentDescription(specStack.peek());
+            setCurrentContext(specStack.peek());
         }
     }
 

@@ -1,7 +1,5 @@
 package org.eck.spec;
 
-import org.junit.runner.Description;
-
 public class Spectre {
     public static void describe(String decription, Block block) {
         SpectreSession.instance().createNewTestGroupDescription(decription);
@@ -15,14 +13,15 @@ public class Spectre {
         SpectreSession.instance().blockDone();
     }
 
-    public static void before(String decription, Block block) {
-        // TODO
+    public static void before(Block block) {
+        SpectreSession.instance().addBefore(block);
+    }
+
+    public static void beforeEach(Block block) {
+        SpectreSession.instance().addBeforeEach(block);
     }
 
     public static void it(String decription, Block block) {
-        Description description = SpectreSession.instance().createNewTestDescription(decription);
-        SpectreTestEntry specEntry = new SpectreTestEntry(description, block);
-        SpectreSession.instance().addSpec(specEntry);
+        SpectreSession.instance().createNewTestDescription(decription, block);
     }
-
 }

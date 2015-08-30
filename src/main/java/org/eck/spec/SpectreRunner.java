@@ -37,7 +37,7 @@ public class SpectreRunner extends Runner {
                 Description methodSpec = Description.createTestDescription(method.getName(), method.getName());
                 spec.addChild(methodSpec);
 
-                SpectreSession.instance().setCurrentDescription(methodSpec);
+                SpectreSession.instance().setCurrentContext(new SpecContext(methodSpec));
 
                 try {
                     method.invoke(instance);
