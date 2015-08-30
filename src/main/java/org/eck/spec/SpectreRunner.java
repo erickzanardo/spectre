@@ -54,10 +54,10 @@ public class SpectreRunner extends Runner {
 
     @Override
     public void run(RunNotifier runNotifier) {
-
         for (SpectreTestEntry entry : specs) {
             runNotifier.fireTestStarted(entry.getSpec());
             try {
+                entry.resolveContext();
                 entry.getIt().execute();
             } catch (AssertionError | Exception e) {
                 Failure failure = new Failure(entry.getSpec(), e);

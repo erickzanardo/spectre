@@ -35,4 +35,9 @@ public class SpecContext {
     public SpecContext getParent() {
         return parent;
     }
+
+    @Override
+    public String toString() {
+        return spec.toString();
+    }
 }

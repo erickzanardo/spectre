@@ -51,7 +51,7 @@ public class SpectreSession {
         SpecContext context = new SpecContext(spec);
 
         if (currentContext != null) {
-            context.setParent(context);
+            context.setParent(currentContext);
         }
 
         currentContext.getSpec().addChild(spec);
