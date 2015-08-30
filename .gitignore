@@ -1,0 +1,8 @@
+*.swp
+*.swx
+*.swo
+.classpath
+.settings
+.project
+target/
+workbench.xmi
