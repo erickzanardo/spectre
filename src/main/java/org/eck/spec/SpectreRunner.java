@@ -5,7 +5,6 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.ComparisonFailure;
 import org.junit.runner.Description;
 import org.junit.runner.Runner;
 import org.junit.runner.notification.Failure;
@@ -60,7 +59,7 @@ public class SpectreRunner extends Runner {
             runNotifier.fireTestStarted(entry.getSpec());
             try {
                 entry.getIt().execute();
-            } catch (ComparisonFailure e) {
+            } catch (AssertionError | Exception e) {
                 Failure failure = new Failure(entry.getSpec(), e);
                 runNotifier.fireTestFailure(failure);
             }
