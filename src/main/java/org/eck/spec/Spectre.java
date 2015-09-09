@@ -21,6 +21,14 @@ public class Spectre {
         SpectreSession.instance().addBeforeEach(block);
     }
 
+    public static void after(Block block) {
+        SpectreSession.instance().addAfter(block);
+    }
+
+    public static void afterEach(Block block) {
+        SpectreSession.instance().addAfterEach(block);
+    }
+
     public static void it(String decription, Block block) {
         SpectreSession.instance().createNewTestDescription(decription, block);
     }

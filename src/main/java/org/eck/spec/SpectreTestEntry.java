@@ -30,7 +30,7 @@ public class SpectreTestEntry {
         return context;
     }
 
-    public void resolveContext() {
+    public void resolveBefore() {
         List<Block> before = new ArrayList<>();
         List<Block> beforeEach = new ArrayList<>();
 
@@ -55,6 +55,39 @@ public class SpectreTestEntry {
         }
 
         for (Block block : beforeEach) {
+            block.execute();
+        }
+    }
+
+    public void resolveAfter() {
+        context.testExecuted();
+
+        List<Block> after = new ArrayList<>();
+        List<Block> afterEach = new ArrayList<>();
+
+        Stack<SpecContext> contexts = new Stack<>();
+
+        SpecContext current = context;
+        while(current != null) {
+            contexts.push(current);
+            current = current.getParent();
+        }
+
+        while(!contexts.isEmpty()) {
+            if(contexts.peek().testCount() == 0) {
+                after.addAll(contexts.peek().getAfter());
+                // Afters are executed only once, so we remove then from the context
+                contexts.peek().getAfter().clear();
+            }
+            afterEach.addAll(contexts.peek().getAfterEach());
+            contexts.pop();
+        }
+
+        for (Block block : after) {
+            block.execute();
+        }
+
+        for (Block block : afterEach) {
             block.execute();
         }
     }

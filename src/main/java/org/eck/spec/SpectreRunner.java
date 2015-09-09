@@ -57,8 +57,9 @@ public class SpectreRunner extends Runner {
         for (SpectreTestEntry entry : specs) {
             runNotifier.fireTestStarted(entry.getSpec());
             try {
-                entry.resolveContext();
+                entry.resolveBefore();
                 entry.getIt().execute();
+                entry.resolveAfter();
             } catch (AssertionError | Exception e) {
                 Failure failure = new Failure(entry.getSpec(), e);
                 runNotifier.fireTestFailure(failure);

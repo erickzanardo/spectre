@@ -21,7 +21,6 @@ public class SpectreSession {
 
     public void setCurrentContext(SpecContext context) {
         this.currentContext = context;
-        ;
     }
 
     public void setCurrentClass(Class aClass) {
@@ -39,6 +38,7 @@ public class SpectreSession {
     public Description createNewTestDescription(String name, Block block) {
         Description spec = Description.createTestDescription(currentClass, name);
         currentContext.getSpec().addChild(spec);
+        currentContext.newTestOnThisContext();
 
         SpectreTestEntry specEntry = new SpectreTestEntry(spec, block, currentContext);
         addSpec(specEntry);
@@ -67,6 +67,14 @@ public class SpectreSession {
 
     public void addBeforeEach(Block block) {
         currentContext.getBeforeEach().add(block);
+    }
+
+    public void addAfter(Block block) {
+        currentContext.getAfter().add(block);
+    }
+
+    public void addAfterEach(Block block) {
+        currentContext.getAfterEach().add(block);
     }
 
     public void blockDone() {
