@@ -1,6 +1,5 @@
 package org.eck.spec;
 
-import static org.eck.spec.Spectre.context;
 import static org.eck.spec.Spectre.describe;
 import static org.eck.spec.Spectre.before;
 import static org.eck.spec.Spectre.after;
